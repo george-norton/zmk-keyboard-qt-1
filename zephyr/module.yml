@@ -1,0 +1,6 @@
+name: zmk-keyboard-template-qt-1
+build:
+  depends:
+    - zmk-behavior-ble-lego-control
+  settings:
+    board_root: .

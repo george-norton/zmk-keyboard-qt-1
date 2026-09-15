@@ -1,0 +1,64 @@
+#include <dt-bindings/zmk/matrix_transform.h>
+#include "qt-1-layouts.dtsi"
+
+&physical_layout0 {
+    transform = <&default_transform>;
+};
+
+/ {
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,physical-layout = &physical_layout0;
+    };
+
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-direct";
+        wakeup-source;
+
+        input-gpios
+            = <&pro_micro 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            //, <&pro_micro 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            //, <&pro_micro 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            ;
+
+    };
+
+    default_transform: keymap_transform {
+        compatible = "zmk,matrix-transform";
+        rows = <1>;
+        columns = <10>;
+        map = <
+            RC(0,0) RC(0,1) RC(0,2) RC(0,3)
+            RC(0,4) RC(0,5) RC(0,6) RC(0,7)
+            RC(0,8) RC(0,9)
+        >;
+    };
+
+    soft_off_wakers {
+        compatible = "zmk,soft-off-wakeup-sources";
+        status = "okay";
+
+        wakeup-sources = <&kscan0>;
+    };
+
+    aliases {
+        led0 = &status_led;
+    };
+
+    leds {
+		compatible = "gpio-leds";
+        status_led: status_led {
+			gpios = <&pro_micro 4 GPIO_ACTIVE_HIGH>;
+			label = "Status LED";
+		};
+	};
+};

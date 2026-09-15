@@ -1,0 +1,7 @@
+
+if SHIELD_QT_1
+
+config ZMK_KEYBOARD_NAME
+    default "QT-1"
+
+endif

@@ -1,0 +1,81 @@
+
+// Copyright (c) 2026 George Norton
+// SPDX-License-Identifier: MIT
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <input/processors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/behavior_ble_lego_hub.h>
+
+/ {
+    behaviors {
+        hub_control: hub_control {
+            compatible = "zmk,behavior-ble-lego-hub";
+            #binding-cells = <1>;
+            display-name = "Hub Control";
+        };
+        motor_forwards: motor_forwards {
+            compatible = "zmk,behavior-ble-lego-motor-control";
+            #binding-cells = <1>;
+            speed = <100>;
+            display-name = "Motor forwards";
+        };
+        motor_backwards: motor_backwards {
+            compatible = "zmk,behavior-ble-lego-motor-control";
+            #binding-cells = <1>;
+            speed = <(-100)>;
+            display-name = "Motor backwards";
+        };
+        motor_add_10: motor_add_10 {
+            compatible = "zmk,behavior-ble-lego-motor-control";
+            #binding-cells = <1>;
+            relative;
+            speed = <10>;
+            display-name = "Motor speed +10%";
+        };
+        motor_sub_10: motor_sub_10 {
+            compatible = "zmk,behavior-ble-lego-motor-control";
+            #binding-cells = <1>;
+            relative;
+            speed = <(-10)>;
+            display-name = "Motor speed -10%";
+        };
+        pair_off: pair_off {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <1000>;
+            bindings = <&soft_off>, <&hub_control>;
+            display-name = "Tap to pair, hold to turn off";
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+        combo_bootloader {
+            timeout-ms = <1000>;
+            key-positions = <8 9>;
+            bindings = <&bootloader>;
+        };
+    };
+    
+    
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            bindings = <
+                &motor_forwards(0)   &motor_backwards(1)   &motor_backwards(0)   &motor_forwards(1)  &motor_forwards(2)   &motor_backwards(3)   &motor_backwards(2)   &motor_forwards(3)   &pair_off 0 HUB_PAIR_CMD   &to 1
+            >;
+            display-name = "Default layer";
+        };
+
+        speed_adjust_layer {
+            bindings = <
+                &motor_add_10(0)   &motor_sub_10(1)   &motor_sub_10(0)   &motor_add_10(1)  &motor_add_10(2)   &motor_sub_10(3)   &motor_sub_10(2)   &motor_add_10(3)   &trans  &to 0
+            >;
+            display-name = "Speed control layer";
+        };
+    };
+};
